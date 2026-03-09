@@ -11,7 +11,8 @@ type Item = {
 type Action =
   | { type: "ADD"; payload: string }
   | { type: "REMOVE"; payload: number }
-  | { type: "BUY"; payload: number };
+  | { type: "BUY"; payload: number }
+  | { type: "CLEAR_BOUGHT" };
 
 
 function App() {
@@ -30,6 +31,10 @@ function App() {
     dispatch({ type: "BUY", payload: id });
   }
 
+  const clearBought = () => {
+    dispatch({ type: "CLEAR_BOUGHT" });
+  }
+
   useEffect(() => {
     localStorage.setItem("items", JSON.stringify(items));
   }, [items]);
@@ -43,6 +48,7 @@ function App() {
         onDelete={removeItem}
         onToggleBought={toggleBought}
       />
+      <button onClick={clearBought}>Clear Bought Products</button>
     </div>
   );
 }
@@ -61,6 +67,8 @@ function ItemReducer(state: Item[], action: Action): Item[] {
       return state.map(item =>
         item.id === action.payload ? { ...item, bought: !item.bought } : item
       );
+    case "CLEAR_BOUGHT":
+      return state.filter(item => !item.bought);
     default:
       return state;
   }
