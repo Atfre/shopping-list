@@ -1,22 +1,31 @@
 import { useState } from 'react'
 import './App.css'
-
+import { useEffect } from 'react'
 
 type Task = {  
   id: number;
   title: string;
   completed: boolean;
 };
+
 type TaskInputProps = {
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 };
+
 type TaskListProps = {
   tasks: Task[];
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 };
 
 function App() {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>(() => {
+    const savedTasks = localStorage.getItem("tasks");
+    return savedTasks ? JSON.parse(savedTasks) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   return (
     <div className="App">
@@ -59,9 +68,9 @@ function TaskList({ tasks, setTasks }: TaskListProps) {
       {tasks.map((task) => (
         <p key={task.id} style={{ color: task.completed ? "gray" : "white", textDecoration: task.completed ? "line-through" : "none" }}>
           {task.title}
-          <button id="delete" onClick={() => handleDelete(task.id)}>Remove</button>
-          <button id="complete" onClick={() => setTasks(prev => prev.map(t => t.id === task.id ? { ...t, completed: !t.completed } : t))}>
-            {task.completed ? "Undo" : "Bought"}
+          <button id="delete" onClick={() => handleDelete(task.id)}>❌</button>
+          <button id="bought" onClick={() => setTasks(prev => prev.map(t => t.id === task.id ? { ...t, completed: !t.completed } : t))}>
+            {task.completed ? "🔄️" : "💲"}
           </button>
         </p>
       ))}

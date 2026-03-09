@@ -20,7 +20,7 @@ input {
 }
 
 #delete {
-  background-color: red;
+  background-color: rgba(255, 0, 0, 0.25);
   color: white;
   border: none;
   padding: 0.5em 1em;
@@ -31,7 +31,7 @@ input {
 }
 
 #delete:hover {
-  background-color: darkred;
+  background-color: rgba(139, 0, 0, 0.25);
 }
 
 #add {
@@ -49,8 +49,8 @@ input {
   background-color: gray;
 }
 
-#complete {
-  background-color: green;
+#bought {
+  background-color: rgba(0, 128, 0, 0.25);
   color: white;
   border: none;
   padding: 0.5em 1em;
@@ -60,6 +60,6 @@ input {
   transition: all 0.3s ease;
 }
 
-#complete:hover {
-  background-color: darkgreen;
+#bought:hover {
+  background-color: rgba(0, 100, 0, 0.25);
 }
