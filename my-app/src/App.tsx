@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import './App.css'
+import { useReducer, useState } from 'react'
 import { useEffect } from 'react'
+import './App.css'
 
 type Item = {  
   id: number;
@@ -8,23 +8,26 @@ type Item = {
   bought: boolean;
 };
 
+type Action =
+  | { type: "ADD"; payload: string }
+  | { type: "REMOVE"; payload: number }
+  | { type: "BUY"; payload: number };
+
+
 function App() {
-  const [items, setItems] = useState<Item[]>(() => {
-    const savedItems = localStorage.getItem("items");
-    return savedItems ? JSON.parse(savedItems) : [];
-  });
+  const [items, dispatch] = useReducer(ItemReducer, [], loadItems);
 
   const addItem = (title: string) => {
     if (title.trim() === "") return;
-    setItems(prev => [...prev, { id: Date.now(), title, bought: false }]);
+    dispatch({ type: "ADD", payload: title });
   }
 
   const removeItem = (id: number) => {
-    setItems(prev => prev.filter(item => item.id !== id));
+    dispatch({ type: "REMOVE", payload: id });
   }
 
   const toggleBought = (id: number) => {
-    setItems(prev => prev.map(item => item.id === id ? { ...item, bought: !item.bought } : item));
+    dispatch({ type: "BUY", payload: id });
   }
 
   useEffect(() => {
@@ -42,6 +45,25 @@ function App() {
       />
     </div>
   );
+}
+
+function ItemReducer(state: Item[], action: Action): Item[] {
+  switch (action.type) {
+    case "ADD":
+      if (action.payload.trim() === "") return state;
+      return [
+        ...state,
+        { id: Date.now(), title: action.payload, bought: false }
+      ];
+    case "REMOVE":
+      return state.filter(item => item.id !== action.payload);
+    case "BUY":
+      return state.map(item =>
+        item.id === action.payload ? { ...item, bought: !item.bought } : item
+      );
+    default:
+      return state;
+  }
 }
 
 function ItemInput({ onAdd }: { onAdd: (text: string) => void }) {
@@ -80,12 +102,17 @@ function ItemList({
           {item.title}
           <button id="delete" onClick={() => onDelete(item.id)}>❌</button>
           <button id="bought" onClick={() => onToggleBought(item.id)}>
-            {item.bought ? "🔄️" : "💲"}
+            {item.bought ? "Undo" : "Buy"}
           </button>
         </p>
       ))}
     </>
   );
+}
+
+function loadItems(): Item[] {
+  const data = localStorage.getItem("items");
+  return data ? JSON.parse(data) : [];
 }
 
 export default App
