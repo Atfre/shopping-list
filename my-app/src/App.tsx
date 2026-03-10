@@ -16,7 +16,7 @@ type Action =
 
 
 function App() {
-  const [items, dispatch] = useLocalStorageReducer();
+  const [items, dispatch] = useLocalStorageReducer(ItemReducer, "items", []);
 
   const addItem = (title: string) => {
     if (title.trim() === "") return;
@@ -49,12 +49,17 @@ function App() {
   );
 }
 
-function useLocalStorageReducer() {
-  const [state, dispatch] = useReducer(ItemReducer, [], loadItems);
+function useLocalStorageReducer<S, A>( reducer: React.Reducer<S, A>, key: string, initialState: S ) {
+  const initializer = (initialValue: S) => {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : initialValue;
+  }
+
+  const [state, dispatch] = useReducer(reducer, initialState, initializer);
 
   useEffect(() => {
-    localStorage.setItem("items", JSON.stringify(state));
-  }, [state]);
+    localStorage.setItem(key, JSON.stringify(state));
+  }, [key, state]);
 
   return [state, dispatch] as const;
 }
@@ -122,11 +127,6 @@ function ItemList({
       ))}
     </>
   );
-}
-
-function loadItems(): Item[] {
-  const data = localStorage.getItem("items");
-  return data ? JSON.parse(data) : [];
 }
 
 export default App
