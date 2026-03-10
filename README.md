@@ -1,42 +1,49 @@
-# 🛒 Shopping List
+# 🛒 Shopping Project
 
-Shopping application built with **React + TypeScript**.
+A shopping application built with **React**, **TypeScript**, and **Vite**.
 
-This application allows users to:
+This project is in continous development. It is used for experimentation, feature testing, improvements, and learning purposes. It is **not intended for commercial or public production use**, but rather as a demonstration and technical practice project.
 
-- Add custom items
+New features are added progressively as part of ongoing development and testing.
+
+## ✨ Features
+
+- Add custom items to the list
 - Remove items
 - Mark items as purchased
 - Undo purchased items
 - Clear all purchased items
-- Save data using localStorage
+- Persistent data using localStorage
+- External product fetching from API
+- Loading and error handling states
+- Responsive layout
 
 ---
 
-## 🔗 Structure
+## 📝 Future Implementations
 
-The application follows a clear separation:
+Planned features include:
 
-- **App**
-  - Manages state
-  - Contains the logic
-  - Uses a custom reducer hook
-  - Connects the Shopping List with the Store
-  - Handles localStorage
+- Category filtering system
+- Search functionality
+- Drag and drop item reordering
+- Improved UI styling and responsive design
+- Dark and light themes toggle
+- Backend integration for persistent storage
+- Authentication system
 
-- **ItemInput**
-  - Handles user input
-  - Triggers item creation
+---
 
-- **ItemList**
-  - Displays items
-  - Triggers delete and toggle actions
- 
-- **ProductList**
-  - Fetches items from an external API
-  - Handles errors and loading
+## 📂 Structure
 
-This structure improves scalability and maintainability of the application and its content.
+```
+src/
+ └── App.tsx
+```
+- **App** - Main controller and state management
+- **ItemInput** - Handles custom item creation
+- **ItemList** - Display items and manages buy/delete actions
+- **ProductList** - Fetches external products and handles errors and loading
 
 ---
 
@@ -45,12 +52,3 @@ This structure improves scalability and maintainability of the application and i
 Products are fetched from:
 
 https://fakestoreapi.com/products
-
----
-
-## 🖥️ Technologies Used
-
-- React
-- TypeScript
-- Vite
-- CSS
